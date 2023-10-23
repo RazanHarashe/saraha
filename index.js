@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv'
-dotenv.config()
+dotenv.config();
 import express from 'express'
 import initApp from './Src/Modules/app.router.js';
 const app=express();

@@ -1,3 +1,4 @@
+import joi from 'joi';
 import mongoose, {Schema,model} from 'mongoose';
 
 
@@ -29,13 +30,18 @@ const UserSchema = new Schema({
 
     },
     age:{
-        type:Number
+        type:Number,
+    },
+    profilePic:{
+        type:Object,
+    },
+    cover:{
+        type:[String],
     }
 }, {
    
         timestamps:true,
     
-
 })
 const userModel = mongoose.models.User || model('User',UserSchema);
 export default userModel;

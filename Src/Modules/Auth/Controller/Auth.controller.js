@@ -33,16 +33,19 @@ export const signup = async (req, res,next) => {
         const user = await userModel.findOne({email});
 
         if (!user) {
-            return res.status(404).json({ message: "data invaild" });
+            //return res.status(404).json({ message: "data invaild" });
+            return next(new Error("data invaild"));
         }
 
         if (!user.confirmEmail) {
-            return res.status(400).json({ message: "plz confirm your eamil " });
+           // return res.status(400).json({ message: "plz confirm your eamil " });
+           return next(new Error("plz confirm your eamil"));
         }
         
         const match = bcrypt.compareSync(password, user.password);
         if (!match) {
-            return res.status(404).json({ message: "data invaild"});
+            //return res.status(404).json({ message: "data invaild"});
+            return next(new Error("data invaild"));
         }
         
         const token = jwt.sign({ id: user._id },process.env.LOGINSIGNATURE,{ expiresIn: '1h' });
@@ -57,7 +60,8 @@ export const signup = async (req, res,next) => {
         const user = await userModel.findOneAndUpdate({ email: decoded.email, confirmEmail: false }, { confirmEmail: true });
     
         if (!user) {
-            return res.status(400).json({ message: "your email is verified" });
+           // return res.status(400).json({ message: "your email is verified" });
+           return next(new Error("your email is verified"));
         }
     
         if (user) {
@@ -78,4 +82,5 @@ export const signup = async (req, res,next) => {
     
         await sendEmail(decoded.email, "confirm email", html)
         return res.status(201).json({ message: "new email is sent succcessfully" })
+        
     } 

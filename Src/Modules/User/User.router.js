@@ -1,8 +1,9 @@
-import express from 'express'
+import { Router } from 'express'
 import * as usreController from './Controller/user.controller.js';
 import  {auth} from '../../Middleware/Auth.Middleware.js';
-const app = express();
+import fileUpload, { fileValidation } from '../../Services/cloudMulter.js';
+const router = Router();
 
-app.get('/',auth,usreController.profile);
-
-export default app;
+router.get('/',fileUpload(fileValidation.image).single('image'),auth,usreController.profile);
+router.patch('/cover',fileUpload(fileValidation.image).array('image',5),auth,usreController.coverPic);
+export default router;  
